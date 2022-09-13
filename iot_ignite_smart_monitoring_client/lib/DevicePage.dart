@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iotignite_mqtt_client/manager/iot_ignite_rest_manager.dart';
 import 'package:iotignite_mqtt_client/model/device_response.dart';
 import 'package:iotignite_mqtt_client/model/pages.dart';
@@ -29,7 +30,17 @@ class _DevicePageState extends State<DevicePage> {
 
   // When going back from the bottom back button
   Future<bool> backButton(BuildContext context) async {
-    exit();
+    var sp = await SharedPreferences.getInstance();
+
+    if(rememberMe == false){
+      sp.remove("email");
+      sp.remove("password");
+    }
+
+    IotIgniteRESTLib.getAuthenticatedInstance().signOut();
+
+    SystemNavigator.pop(); // exit from the app
+
     return true;
   }
 
