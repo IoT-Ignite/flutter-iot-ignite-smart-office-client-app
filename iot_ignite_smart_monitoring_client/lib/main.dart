@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iotignite_mqtt_client/manager/iot_ignite_rest_manager.dart';
 import 'package:iotignite_mqtt_client/exceptions/invalid_email_format_exception.dart';
-import 'package:iotignite_mqtt_client/view/device_page.dart';
-import 'package:iotignite_mqtt_client/view/things_page.dart';
+import 'package:iot_ignite_smart_monitoring_client/DevicePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gradient_borders/gradient_borders.dart';
@@ -244,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           print("futurebuilder"),
                           if (snapshot!) {
                             print("snapshot has data true"),
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DevicePage(),),),
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DevicePage(),),),
                           } else if (snapshot == false) {
                             print("snapshot has data false"),
                             ScaffoldMessenger.of(context).showSnackBar(snackBarFailure),
