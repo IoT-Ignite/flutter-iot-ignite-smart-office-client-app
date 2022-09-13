@@ -8,6 +8,7 @@ import 'package:iotignite_mqtt_client/model/node_inventory_response.dart';
 import 'package:iotignite_mqtt_client/model/sensor_data_response.dart';
 import 'package:flutter/material.dart';
 import 'package:iotignite_mqtt_client/model/things.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 
 class ThingsPage extends StatefulWidget {
@@ -113,7 +114,7 @@ class _ThingsPageState extends State<ThingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 500,
+              height: 575,
               child: Column(
                 children: [
                   Expanded(
@@ -123,29 +124,36 @@ class _ThingsPageState extends State<ThingsPage> {
                           return ListView.builder(
                               shrinkWrap: true,
                               itemCount: sensorResp.extras.nodes[index].things.length,
+                              physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, innerIndex){
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
+                                  child: ListTile(
+                                    tileColor: Colors.green[50],
+                                    leading: const Icon(Icons.device_thermostat),
+                                    title: Text(sensorResp.extras.nodes[index].things[innerIndex].id),
+                                    subtitle: Text(sensorResp.extras.nodes[index].things[innerIndex].type),
+                                    trailing: const Icon(Icons.keyboard_arrow_right),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(13)),),
                                     onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage(sensorName: sensorResp.extras.nodes[index].things[innerIndex].id, deviceName: widget.deviceName,),),);
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage(nodeName: sensorResp.extras.nodes[index].nodeId ,sensorName: sensorResp.extras.nodes[index].things[innerIndex].id, deviceName: widget.deviceName,),),);
+                                    },
+                                  ),
+                                  /*
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage(nodeName: sensorResp.extras.nodes[index].nodeId ,sensorName: sensorResp.extras.nodes[index].things[innerIndex].id, deviceName: widget.deviceName,),),);
                                     },
                                     child: Card(
                                       child:
                                       Column(
                                         children: [
                                           Text(sensorResp.extras.nodes[index].things[innerIndex].id),
-                                          /*
-                                          Text(sensorDataList[index][innerIndex].deviceId),
-                                          Text(sensorDataList[index][innerIndex].data),
-                                          Text(sensorDataList[index][innerIndex].nodeId),
-                                          Text(sensorDataList[index][innerIndex].sensorId),
-                                          Text(sensorDataList[index][innerIndex].command),
-                                          Text(sensorDataList[index][innerIndex].cloudDate.toString()),*/
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  ), */
                                 );
                               }
                           );
@@ -157,7 +165,12 @@ class _ThingsPageState extends State<ThingsPage> {
             )
           ],
         ),
-      ): Center(child: CircularProgressIndicator()),
+      ): Center(
+        child: LoadingAnimationWidget.fourRotatingDots(
+            color: Colors.orangeAccent,
+            size: 60
+        ),
+      ),
     );
   }
 }

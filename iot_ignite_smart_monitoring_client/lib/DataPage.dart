@@ -6,12 +6,14 @@ import 'package:iotignite_mqtt_client/model/data.dart';
 import 'package:iotignite_mqtt_client/model/node_inventory_response.dart';
 import 'package:iot_ignite_smart_monitoring_client/ThingsPage.dart';
 import 'package:iotignite_mqtt_client/model/sensor_data_response.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 
 class DataPage extends StatefulWidget {
   final String deviceName;
   final String sensorName;
-  const DataPage({Key? key, required this.sensorName, required this.deviceName}) : super(key: key);
+  final String nodeName;
+  const DataPage({Key? key, required this.sensorName, required this.nodeName, required this.deviceName}) : super(key: key);
 
   @override
   State<DataPage> createState() => _DataPageState();
@@ -22,7 +24,9 @@ class _DataPageState extends State<DataPage> {
   Timer? timerRefreshData;
   Timer? timerRefreshToken;
 
-  List<List<Data>> sensorDataList = [];
+  //List<List<Data>> sensorDataList = [];
+  
+  late SensorDataResponse sensorResp = SensorDataResponse("", Data("", "", "", 0, "", "", 0));
 
   @override
   void initState() {
@@ -31,7 +35,7 @@ class _DataPageState extends State<DataPage> {
       var data = await sensorDataResp();
       print("Refreshed sensor datas");
       setState((){
-        sensorDataList = data;
+        sensorResp = data!;
       });
     });
 
@@ -49,11 +53,11 @@ class _DataPageState extends State<DataPage> {
 
     super.dispose();
   }
-
+/*
   Future<NodeInventoryResponse?> nodeInventoryResponse() async {
     NodeInventoryResponse respNode = await IotIgniteRESTLib.getAuthenticatedInstance().getDeviceNodeInventory(widget.deviceName);
     return respNode;
-  }
+  } 
 
   Future<List<List<Data>>> sensorDataResp() async {
 
@@ -73,6 +77,14 @@ class _DataPageState extends State<DataPage> {
       nodeList.add(thingList);
     }
     return nodeList;
+  } */
+
+  Future<SensorDataResponse?> sensorDataResp() async {
+    //NodeInventoryResponse respNode = await IotIgniteRESTLib.getAuthenticatedInstance().getDeviceNodeInventory(widget.deviceName);
+    //return respNode;
+    
+    SensorDataResponse respSensor = await IotIgniteRESTLib.getAuthenticatedInstance().getLastData(widget.deviceName, widget.nodeName, widget.sensorName);
+    return respSensor;
   }
 
   Timer RefreshSensorData() {
@@ -81,12 +93,10 @@ class _DataPageState extends State<DataPage> {
       var data = await sensorDataResp();
       print("Refreshed sensor datas not init");
       setState((){
-        sensorDataList = data;
+        sensorResp = data!;
       });
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -94,44 +104,25 @@ class _DataPageState extends State<DataPage> {
       appBar: AppBar(
         title: Text(widget.sensorName.toString()),
       ),
-      body: sensorDataList.isNotEmpty ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 500,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: sensorDataList.length,
-                        itemBuilder: (context, index){
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: sensorDataList[index].length,
-                              itemBuilder: (context, innerIndex){
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    child:
-                                    Column(
-                                      children: [
-                                        Text(sensorDataList[index][innerIndex].data),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                          );
-                        }
-                    ),
-                  ),
-                ],
+      body: sensorResp.status.isNotEmpty ? Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Card(
+                child: Center(
+                  child: Text(sensorResp.data.data),
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
-      ): const Center(child: CircularProgressIndicator()),
+      ): Center(
+        child: LoadingAnimationWidget.fourRotatingDots(
+            color: Colors.orangeAccent,
+            size: 60
+        ),
+      ),
     );
   }
 

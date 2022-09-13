@@ -8,6 +8,7 @@ import 'package:iotignite_mqtt_client/model/pages.dart';
 import 'package:iot_ignite_smart_monitoring_client/ThingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class DevicePage extends StatefulWidget {
   const DevicePage({Key? key}) : super(key: key);
@@ -120,8 +121,11 @@ class _DevicePageState extends State<DevicePage> {
               );
             }
         ),
-      ): const Center(
-          child: CircularProgressIndicator()
+      ): Center(
+        child: LoadingAnimationWidget.fourRotatingDots(
+            color: Colors.orangeAccent,
+            size: 60
+        ),
       ),
     );
   }
