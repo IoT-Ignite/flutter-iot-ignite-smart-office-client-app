@@ -105,20 +105,17 @@ class _DevicePageState extends State<DevicePage> {
             itemBuilder: (context, index){
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
+                child: ListTile(
+                  tileColor: Colors.blue[50],
+                  leading: const Icon(Icons.devices),
+                  title: Text(deviceResp.content[index].deviceId),
+                  subtitle: Text(deviceResp.content[index].label == "" ? deviceResp.content[index].model : deviceResp.content[index].label),
+                  trailing: const Icon(Icons.keyboard_arrow_right),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(13)),),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ThingsPage(deviceName: deviceResp.content[index].deviceId),),);
                   },
-                  child: Card(
-                    child:
-                    Column(
-                      children: [
-                        Text(deviceResp.content[index].deviceId),
-                        Text(deviceResp.content[index].label == "" ? deviceResp.content[index].model : deviceResp.content[index].label),
-                        //Text(deviceResp.content[index].model),
-                      ],
-                    ),
-                  ),
                 ),
               );
             }
