@@ -24,6 +24,8 @@ class _DevicePageState extends State<DevicePage> {
   bool? rememberMe;
   late DeviceResponse deviceResp = DeviceResponse([], [], Pages(0,0,0,0)); // empty object
 
+  Timer? timerRefreshToken;
+
   Future<DeviceResponse> deviceResponse() async {
     DeviceResponse respDevice = await IotIgniteRESTLib.getAuthenticatedInstance().getDeviceInfo();
     return respDevice;
@@ -82,7 +84,16 @@ class _DevicePageState extends State<DevicePage> {
       });
     });
 
+    timerRefreshToken = IotIgniteRESTLib.getAuthenticatedInstance().RefreshToken();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timerRefreshToken?.cancel();
+
+    super.dispose();
   }
 
   @override
