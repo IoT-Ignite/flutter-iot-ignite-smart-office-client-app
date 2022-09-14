@@ -71,7 +71,7 @@ class _ThingsPageState extends State<ThingsPage> {
     } else if(sensorResp.code == "200") {
       return nodeListWidget();
     } else {
-      return Center(child: Text("CODE: ${sensorResp.code}",
+      return const Center(child: Text("NO SENSOR",
           style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 25, color: Colors.indigo, fontWeight: FontWeight.bold),));
     }
   }
@@ -108,7 +108,7 @@ class _ThingsPageState extends State<ThingsPage> {
                                 child: ListTile(
                                   tileColor: Colors.green[50],
                                   leading: const Icon(Icons.device_thermostat),
-                                  title: Text(sensorResp.extras.nodes[index].things[innerIndex].id),
+                                  title: Text(sensorResp.extras.nodes[index].nodeId + " / " + sensorResp.extras.nodes[index].things[innerIndex].id),
                                   subtitle: Text(sensorResp.extras.nodes[index].things[innerIndex].type),
                                   trailing: const Icon(Icons.keyboard_arrow_right),
                                   shape: const RoundedRectangleBorder(

@@ -97,7 +97,7 @@ class _DataPageState extends State<DataPage> {
                           style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 20, color: Colors.indigo, fontWeight: FontWeight.bold),),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 15.0),
-                            child: Text(sensorResp.data.deviceId ?? "NO DEVICE",
+                            child: Text(widget.sensorName,
                             style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 20, color: Colors.indigo[300], fontWeight: FontWeight.bold),),
                           ),
                           const Text("DATA:",
