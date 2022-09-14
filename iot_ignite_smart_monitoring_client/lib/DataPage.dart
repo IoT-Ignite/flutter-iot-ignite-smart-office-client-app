@@ -7,6 +7,8 @@ import 'package:iotignite_mqtt_client/model/node_inventory_response.dart';
 import 'package:iot_ignite_smart_monitoring_client/ThingsPage.dart';
 import 'package:iotignite_mqtt_client/model/sensor_data_response.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:gradient_borders/gradient_borders.dart';
+
 
 
 class DataPage extends StatefulWidget {
@@ -110,8 +112,34 @@ class _DataPageState extends State<DataPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Card(
-                child: Center(
-                  child: Text(sensorResp.data.data),
+                elevation: 0,
+                color: Colors.orange[50],
+                shape: const GradientOutlineInputBorder(
+                  gradient: LinearGradient(colors: [Colors.lightBlueAccent, Colors.lightGreenAccent ]),
+                  width: 2,
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                ),
+                child: SizedBox(
+                  width: 350,
+                  height: 200,
+                  child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("DEVICE:",
+                          style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 20, color: Colors.indigo, fontWeight: FontWeight.bold),),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            child: Text(sensorResp.data.deviceId,
+                            style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 20, color: Colors.indigo[300], fontWeight: FontWeight.bold),),
+                          ),
+                          const Text("DATA:",
+                            style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 20, color: Colors.indigo, fontWeight: FontWeight.bold),),
+                          Text(sensorResp.data.data,
+                          style: TextStyle(fontFamily: 'SignikaNegative', fontSize: 25, color: Colors.green[600], fontWeight: FontWeight.bold),),
+                        ],
+                      ),
+                  ),
                 ),
               ),
             ],
@@ -125,6 +153,4 @@ class _DataPageState extends State<DataPage> {
       ),
     );
   }
-
-
 }
